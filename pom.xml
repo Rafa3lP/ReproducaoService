@@ -21,11 +21,11 @@
     </repositories>
 
     <dependencies>
-        <dependency>
-            <groupId>com.github.heflain-mendes</groupId>
-            <artifactId>StreamMusicas</artifactId>
-            <version>1.0.5</version>
-        </dependency>
+	<dependency>
+	    <groupId>com.github.heflain-mendes</groupId>
+	    <artifactId>StreamMusicas</artifactId>
+	    <version>1.0.17</version>
+	</dependency>
     </dependencies>
 
 </project>
