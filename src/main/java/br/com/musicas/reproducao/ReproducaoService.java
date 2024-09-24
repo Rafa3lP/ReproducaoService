@@ -9,13 +9,14 @@ import br.com.interfaces.services.IReproducaoService;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Queue;
 
 public class ReproducaoService implements IReproducaoService {
     private Queue<IMusica> filaDeReproducao = new LinkedList<>();
     private IMusica musicaAtual;
     private boolean isPaused = false;
-    private boolean isStopped = false; 
+    private boolean isStopped = false;
     private IUsuario usuarioAtual;
     private Thread threadReproducao;
 
@@ -120,13 +121,12 @@ public class ReproducaoService implements IReproducaoService {
 
     @Override
     public List<IMusica> obterRecomendacoesDuranteReproducao(IRecomendacaoService irs, IUsuario iu) {
-        //chamada externa
-        return null;
+        var recomendacoes = irs.recomendarMusicasBaseadoNoHistorico(iu);
+        return recomendacoes;
     }
 
     @Override
     public String exibirInformacoesArtistaDuranteReproducao(IMusica im, IArtistaService ias) {
-        //chamada externa
-        return null;
+        return ias.getBiografia(im.getArtista()).orElse("");
     }
 }
