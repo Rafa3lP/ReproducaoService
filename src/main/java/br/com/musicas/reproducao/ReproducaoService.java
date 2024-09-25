@@ -6,10 +6,8 @@ import br.com.interfaces.model.IUsuario;
 import br.com.interfaces.services.IArtistaService;
 import br.com.interfaces.services.IRecomendacaoService;
 import br.com.interfaces.services.IReproducaoService;
-
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.Queue;
 
 public class ReproducaoService implements IReproducaoService {
@@ -21,18 +19,18 @@ public class ReproducaoService implements IReproducaoService {
     private Thread threadReproducao;
 
     @Override
-    public void reproduzirMusica(IMusica im, IUsuario iu) {
-        usuarioAtual = iu;
+    public void reproduzirMusica(IMusica musica, IUsuario usuario) {
+        usuarioAtual = usuario;
         filaDeReproducao.clear();
-        filaDeReproducao.add(im);
+        filaDeReproducao.add(musica);
         tocarProximaMusica();
     }
 
     @Override
-    public void reproduzirPlayList(IPlaylist ip, IUsuario iu, IArtistaService ias) {
-        usuarioAtual = iu;
+    public void reproduzirPlayList(IPlaylist playlist, IUsuario usuario, IArtistaService artistaService) {
+        usuarioAtual = usuario;
         filaDeReproducao.clear();
-        filaDeReproducao.addAll(ip.getMusicas());
+        filaDeReproducao.addAll(playlist.getMusicas());
         tocarProximaMusica();
     }
 
@@ -89,29 +87,29 @@ public class ReproducaoService implements IReproducaoService {
     }
 
     @Override
-    public void pausarReproducao(IUsuario iu) {
+    public void pausarReproducao(IUsuario usuario) {
         if (musicaAtual != null && !isPaused) {
             isPaused = true;
-            System.out.println("Reprodução pausada para o usuário " + iu.getNome() + ": " + musicaAtual.getTitulo());
+            System.out.println("Reprodução pausada para o usuário " + usuario.getNome() + ": " + musicaAtual.getTitulo());
         }
     }
 
     @Override
-    public void retomarReproducao(IUsuario iu) {
+    public void retomarReproducao(IUsuario usuario) {
         if (musicaAtual != null && isPaused) {
             isPaused = false;
             synchronized (this) {
                 notify(); 
             }
-            System.out.println("Reprodução retomada para o usuário " + iu.getNome() + ": " + musicaAtual.getTitulo());
+            System.out.println("Reprodução retomada para o usuário " + usuario.getNome() + ": " + musicaAtual.getTitulo());
         }
     }
 
     @Override
-    public void pararReproducao(IUsuario iu) {
+    public void pararReproducao(IUsuario usuario) {
         if (musicaAtual != null) {
             isStopped = true;
-            System.out.println("Reprodução parada para o usuário " + iu.getNome() + ": " + musicaAtual.getTitulo());
+            System.out.println("Reprodução parada para o usuário " + usuario.getNome() + ": " + musicaAtual.getTitulo());
             if (threadReproducao != null && threadReproducao.isAlive()) {
                 threadReproducao.interrupt(); 
             }
@@ -120,13 +118,12 @@ public class ReproducaoService implements IReproducaoService {
     }
 
     @Override
-    public List<IMusica> obterRecomendacoesDuranteReproducao(IRecomendacaoService irs, IUsuario iu) {
-        var recomendacoes = irs.recomendarMusicasBaseadoNoHistorico(iu);
-        return recomendacoes;
+    public List<IMusica> obterRecomendacoesDuranteReproducao(IRecomendacaoService recomendacaoService, IUsuario usuario) {
+        return recomendacaoService.recomendarMusicasBaseadoNoHistorico(usuario);
     }
 
     @Override
-    public String exibirInformacoesArtistaDuranteReproducao(IMusica im, IArtistaService ias) {
-        return ias.getBiografia(im.getArtista()).orElse("");
+    public String exibirInformacoesArtistaDuranteReproducao(IMusica musica, IArtistaService artistaService) {
+        return artistaService.getBiografia(musica.getArtista()).orElse("");
     }
 }
