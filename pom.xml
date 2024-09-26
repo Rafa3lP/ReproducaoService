@@ -22,15 +22,15 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.github.heflain-mendes</groupId>
-            <artifactId>StreamMusicas</artifactId>
-            <version>1.0.18</version>
+	    <groupId>com.github.heflain-mendes</groupId>
+	    <artifactId>StreamMusicas</artifactId>
+	    <version>1.0.23</version>
         </dependency>
 
         <dependency>
-            <groupId>com.github.heflain-mendes</groupId>
-            <artifactId>StreamMusicasPerfilDoArtista</artifactId>
-            <version>1.0.6</version>
+	    <groupId>com.github.heflain-mendes</groupId>
+	    <artifactId>StreamMusicasPerfilDoArtista</artifactId>
+	    <version>1.0.7</version>
         </dependency>
 
         <dependency>

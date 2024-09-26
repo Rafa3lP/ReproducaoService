@@ -27,13 +27,14 @@ public class Main {
         IMusicaRepository musicaRep = MusicaRepository.getMusicaRepository();
         
         IArtistaService artistaService = new ArtistaService(artistaRep, musicaRep);
+        
+        IUsuario usuario = new Usuario("Fulano", "email do fulano", true, true);
 
-        IPlaylist playlist = new Playlist("playlist");
+        IPlaylist playlist = new Playlist("playlist", usuario);
         playlist.adicionarMusica(musica1);
         playlist.adicionarMusica(musica2);
         playlist.adicionarMusica(musica3);
 
-        IUsuario usuario = new Usuario("Fulano", "email do fulano");
 
         ReproducaoService reprodutor = new ReproducaoService();
         

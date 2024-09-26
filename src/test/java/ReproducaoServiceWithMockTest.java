@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import org.mockito.MockitoAnnotations;
@@ -40,10 +41,13 @@ public class ReproducaoServiceWithMockTest {
         IMusica musica = new Musica("titulo", "artista", "genero", 10);
         String retornoEsperado = "Informações do Artista";
         
-        when(artistaServiceMock.getBiografia(musica.getArtista())).thenReturn(Optional.of(retornoEsperado));
+        when(artistaServiceMock
+                .getBiografia(musica.getArtista()))
+                .thenReturn(Optional.of(retornoEsperado));
         
         // When: o metodo exibirInformacoesArtistaDuranteReproducao é chamado
-        var resultado = reproducaoService.exibirInformacoesArtistaDuranteReproducao(musica, artistaServiceMock);
+        var resultado = reproducaoService
+                .exibirInformacoesArtistaDuranteReproducao(musica, artistaServiceMock);
         
         // Then: verifica se artistaService retornou string esperada e se o metodo foi chamado
         assertEquals(retornoEsperado, resultado);
@@ -56,10 +60,13 @@ public class ReproducaoServiceWithMockTest {
         IMusica musica = new Musica("titulo", "artista", "genero", 10);
         String retornoEsperado = "";
         
-        when(artistaServiceMock.getBiografia(musica.getArtista())).thenReturn(Optional.of(retornoEsperado));
+        when(artistaServiceMock
+                .getBiografia(musica.getArtista()))
+                .thenReturn(Optional.of(retornoEsperado));
         
         // When: o metodo exibirInformacoesArtistaDuranteReproducao é chamado
-        var resultado = reproducaoService.exibirInformacoesArtistaDuranteReproducao(musica, artistaServiceMock);
+        var resultado = reproducaoService
+                .exibirInformacoesArtistaDuranteReproducao(musica, artistaServiceMock);
         
         // Then: verifica se artistaService retornou string esperada e se o metodo foi chamado
         assertEquals(retornoEsperado, resultado);
@@ -75,12 +82,14 @@ public class ReproducaoServiceWithMockTest {
         listaEsperada.add(musica1);
         listaEsperada.add(musica2);
         
-        IUsuario usuario = new Usuario("nome", "email");
+        IUsuario usuario = new Usuario("nome", "email", true, true);
         
-        when(recomendacaoServiceMock.recomendarMusicasBaseadoNoHistorico(usuario)).thenReturn(listaEsperada);
+        when(recomendacaoServiceMock
+                .recomendarMusicasBaseadoNoHistorico(usuario)).thenReturn(listaEsperada);
         
         // When: o metodo obterRecomendacoesDuranteReproducao é chamado
-        var resultado = reproducaoService.obterRecomendacoesDuranteReproducao(recomendacaoServiceMock, usuario);
+        var resultado = reproducaoService
+                .obterRecomendacoesDuranteReproducao(recomendacaoServiceMock, usuario);
         
         // Then: verifica se recomendacaoService retornou a lista de musicas esperada e se o metodo foi chamado
         assertEquals(listaEsperada, resultado);
@@ -92,16 +101,38 @@ public class ReproducaoServiceWithMockTest {
         // Given: cria instancia de lista de musicas válidas, usuário e método de obter recomendacoes de musicas
         List<IMusica> listaEsperada = new ArrayList<IMusica>();
         
-        IUsuario usuario = new Usuario("nome", "email");
+        IUsuario usuario = new Usuario("nome", "email", true, true);
         
-        when(recomendacaoServiceMock.recomendarMusicasBaseadoNoHistorico(usuario)).thenReturn(listaEsperada);
+        when(recomendacaoServiceMock
+                .recomendarMusicasBaseadoNoHistorico(usuario)).thenReturn(listaEsperada);
         
         // When: o metodo obterRecomendacoesDuranteReproducao é chamado
-        var resultado = reproducaoService.obterRecomendacoesDuranteReproducao(recomendacaoServiceMock, usuario);
+        var resultado = reproducaoService
+                .obterRecomendacoesDuranteReproducao(recomendacaoServiceMock, usuario);
         
         // Then: verifica se recomendacaoService retornou a lista de musicas esperada e se o metodo foi chamado
         assertEquals(listaEsperada, resultado);
         assertTrue(resultado.isEmpty());
         verify(recomendacaoServiceMock, Mockito.times(1)).recomendarMusicasBaseadoNoHistorico(usuario);
+    }
+    
+    @Test
+    public void naoDeveAtualizarEstatisticaArtistaService() throws Exception{
+        // Given: cria instancia de musica válida e mensagem esperada da excecao
+        IMusica musica = new Musica("titulo", "artista", "genero", 10);
+        var mensagemEsperada = "ReproducaoService não está disponível";
+        
+        doThrow(new Exception("ReproducaoService não está disponível"))
+                .when(artistaServiceMock)
+                .atualizarEstatisticasReproducao(musica);
+        
+        // When: o metodo atualizarEstatisticasReproducao é chamado
+        Exception exception = assertThrows(Exception.class, () -> {
+            artistaServiceMock.atualizarEstatisticasReproducao(musica);
+        });
+        
+        // Then: verifica se artistaService lançou exceção e sua mensagem, e se o metodo foi chamado
+        assertEquals(exception.getMessage(), mensagemEsperada);
+        verify(artistaServiceMock, Mockito.times(1)).atualizarEstatisticasReproducao(musica);
     }
 }

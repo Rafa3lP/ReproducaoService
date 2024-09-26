@@ -9,6 +9,8 @@ import br.com.interfaces.services.IReproducaoService;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ReproducaoService implements IReproducaoService {
     private Queue<IMusica> filaDeReproducao = new LinkedList<>();
@@ -17,6 +19,7 @@ public class ReproducaoService implements IReproducaoService {
     private boolean isStopped = false;
     private IUsuario usuarioAtual;
     private Thread threadReproducao;
+    private IArtistaService artistaService;
 
     @Override
     public void reproduzirMusica(IMusica musica, IUsuario usuario) {
@@ -29,6 +32,7 @@ public class ReproducaoService implements IReproducaoService {
     @Override
     public void reproduzirPlayList(IPlaylist playlist, IUsuario usuario, IArtistaService artistaService) {
         usuarioAtual = usuario;
+        this.artistaService = artistaService;
         filaDeReproducao.clear();
         filaDeReproducao.addAll(playlist.getMusicas());
         tocarProximaMusica();
@@ -81,6 +85,11 @@ public class ReproducaoService implements IReproducaoService {
                 }
             }
             System.out.println("Música " + musicaAtual.getTitulo() + " finalizada.");
+            try {
+                this.artistaService.atualizarEstatisticasReproducao(musicaAtual);
+            } catch (Exception ex) {
+                System.out.print(ReproducaoService.class.getName() + ": Falha ao atualizar estatisticas de reprodução. ");
+            }
             tocarProximaMusica();
         });
         threadReproducao.start();
