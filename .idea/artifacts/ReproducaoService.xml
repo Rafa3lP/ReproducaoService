@@ -1,0 +1,11 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="ReproducaoService">
+    <output-path>$PROJECT_DIR$/out/artifacts/ReproducaoService</output-path>
+    <root id="archive" name="ReproducaoService.jar">
+      <element id="module-output" name="Reproducao" />
+      <element id="library" level="project" name="Maven: com.github.heflain-mendes:StreamMusicas:1.0.18" />
+      <element id="library" level="project" name="Maven: com.github.heflain-mendes:StreamMusicasPerfilDoArtista:1.0.6" />
+      <element id="library" level="project" name="Maven: com.github.MarlanJovencio:recomendacao-service:1.0.0" />
+    </root>
+  </artifact>
+</component>
