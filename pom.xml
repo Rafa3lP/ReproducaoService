@@ -24,19 +24,19 @@
         <dependency>
 	    <groupId>com.github.heflain-mendes</groupId>
 	    <artifactId>StreamMusicas</artifactId>
-	    <version>1.0.23</version>
+	    <version>1.0.24</version>
         </dependency>
 
         <dependency>
 	    <groupId>com.github.heflain-mendes</groupId>
 	    <artifactId>StreamMusicasPerfilDoArtista</artifactId>
-	    <version>1.0.7</version>
+	    <version>1.0.8</version>
         </dependency>
 
         <dependency>
             <groupId>com.github.MarlanJovencio</groupId>
             <artifactId>recomendacao-service</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.4</version>
         </dependency>
 
         <!-- JUnit 5 -->

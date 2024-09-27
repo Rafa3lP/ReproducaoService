@@ -113,7 +113,7 @@ public class ReproducaoServiceWithoutMockTest {
     public void deveBuscarListaDeMusicasVaziaRecomendacaoService() {
         // Given: cria instancia de lista de musicas vazia, usuário e método de obter recomendacoes de musicas
 
-        IUsuario usuario = new Usuario("nome", "email", true, true);
+        IUsuario usuario = new Usuario("", "", true, true);
 
         // When: o método real retorna uma lista vazia
         List<IMusica> resultadoObtido = recomendacaoService.recomendarMusicasBaseadoNoHistorico(usuario);
