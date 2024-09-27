@@ -120,9 +120,9 @@ public class ReproducaoServiceWithMockTest {
     public void naoDeveAtualizarEstatisticaArtistaService() throws Exception{
         // Given: cria instancia de musica válida e mensagem esperada da excecao
         IMusica musica = new Musica("titulo", "artista", "genero", 10);
-        var mensagemEsperada = "ReproducaoService não está disponível";
+        var mensagemEsperada = "Artista artista não existe na plataforma";
         
-        doThrow(new Exception("ReproducaoService não está disponível"))
+        doThrow(new Exception("Artista artista não existe na plataforma"))
                 .when(artistaServiceMock)
                 .atualizarEstatisticasReproducao(musica);
         

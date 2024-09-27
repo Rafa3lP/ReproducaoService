@@ -2,6 +2,7 @@ import br.com.interfaces.model.IMusica;
 import br.com.interfaces.model.IUsuario;
 import br.com.interfaces.repository.IArtistaRepository;
 import br.com.interfaces.repository.IMusicaRepository;
+import br.com.interfaces.repository.IUsuarioRepository;
 import br.com.interfaces.services.IArtistaService;
 import br.com.interfaces.services.IRecomendacaoService;
 import br.com.model.Musica;
@@ -9,6 +10,7 @@ import br.com.model.Usuario;
 import br.com.musicas.reproducao.ReproducaoService;
 import br.com.repositories.ArtistaRepository;
 import br.com.repositories.MusicaRepository;
+import br.com.repositories.UsuarioRepository;
 import br.com.services.ArtistaService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,11 +27,13 @@ public class ReproducaoServiceWithoutMockTest {
     private IRecomendacaoService recomendacaoService;
     private IArtistaRepository artistaRepository;
     private IMusicaRepository musicaRepository;
+    private IUsuarioRepository usuarioRepository;
 
     @BeforeEach
     public void setup() {
         artistaRepository = ArtistaRepository.getArtistaRepository();
         musicaRepository = MusicaRepository.getMusicaRepository();
+        usuarioRepository = UsuarioRepository.getUsuarioRepository();
 
         reproducaoService = new ReproducaoService();
         artistaService = new ArtistaService(artistaRepository, musicaRepository);
@@ -90,13 +94,16 @@ public class ReproducaoServiceWithoutMockTest {
             IMusica musica = musicas.get().get(0);
 
             IUsuario usuario = new Usuario("nome", "email", true, true);
+            usuarioRepository.inserir(usuario);
+
+            recomendacaoService.registrarReproducao(musica, usuario);
 
             // Supondo que o serviço real tenha uma implementação que retorna uma lista de recomendações
             List<IMusica> resultadoObtido = recomendacaoService.recomendarMusicasBaseadoNoHistorico(usuario);
 
             // Then: verifica se recomendacaoService retornou a lista de musicas esperada
             System.out.println(resultadoObtido);
-            assertEquals(null, resultadoObtido);
+            assertNotEquals(List.of(), resultadoObtido);
         } catch (Exception e) {
             fail("Não deveria lançar exceção: " + e.getMessage());
         }
@@ -126,7 +133,7 @@ public class ReproducaoServiceWithoutMockTest {
             fail("Deveria ter lançado uma exceção");
         } catch (Exception e) {
             // Then: verifica se a exceção foi lançada corretamente
-            assertEquals("ReproducaoService não está disponível", e.getMessage());
+            assertEquals("Artista artista não existe na plataforma", e.getMessage());
         }
     }
 }
